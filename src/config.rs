@@ -1,11 +1,11 @@
+use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
-use web3::types::{Address, H160};
 use std::default::Default;
 use std::fs::File;
 use std::io::Read;
-use lazy_static::lazy_static;
-use std::sync::Mutex;
 use std::str::FromStr;
+use std::sync::Mutex;
+use web3::types::{Address, H160};
 
 lazy_static! {
     static ref CONFIG: Mutex<Config> = Mutex::new(Config::default());
@@ -16,7 +16,7 @@ pub struct Config {
     pub infura_apikey: String,
     pub contract_address: String,
     pub account_address: String,
-    pub private_key: String
+    pub private_key: String,
 }
 
 impl Default for Config {
@@ -54,19 +54,18 @@ impl Config {
         let address = H160::from_str(&config_lock.contract_address)?;
         Ok(address.into())
     }
-    
 
     pub fn get_instance() -> &'static Mutex<Config> {
         &CONFIG
     }
 
-    pub fn get_my_account() -> Result<Address, Box<dyn std::error::Error>>{
+    pub fn get_my_account() -> Result<Address, Box<dyn std::error::Error>> {
         let config_lock = CONFIG.lock().unwrap();
         let address = H160::from_str(&config_lock.account_address.to_string())?;
         Ok(address.into())
     }
 
-    pub fn get_my_private_key() -> String{
+    pub fn get_my_private_key() -> String {
         let config_lock = CONFIG.lock().unwrap();
         // private_key = SecretKey::from_str(&config_lock.private_key)?;
         config_lock.private_key.clone()

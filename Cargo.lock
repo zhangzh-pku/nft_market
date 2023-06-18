@@ -1244,6 +1244,7 @@ dependencies = [
 name = "nft_market"
 version = "0.1.0"
 dependencies = [
+ "base64 0.13.1",
  "futures",
  "lazy_static",
  "rocket",
