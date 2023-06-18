@@ -15,6 +15,8 @@ lazy_static! {
 pub struct Config {
     pub infura_apikey: String,
     pub contract_address: String,
+    pub account_address: String,
+    pub private_key: String
 }
 
 impl Default for Config {
@@ -22,6 +24,8 @@ impl Default for Config {
         Config {
             infura_apikey: String::from("infura_apikey"),
             contract_address: String::from("contract_address"),
+            account_address: String::from("account_address"),
+            private_key: String::from("private_key"),
         }
     }
 }
@@ -54,5 +58,17 @@ impl Config {
 
     pub fn get_instance() -> &'static Mutex<Config> {
         &CONFIG
+    }
+
+    pub fn get_my_account() -> Result<Address, Box<dyn std::error::Error>>{
+        let config_lock = CONFIG.lock().unwrap();
+        let address = H160::from_str(&config_lock.account_address.to_string())?;
+        Ok(address.into())
+    }
+
+    pub fn get_my_private_key() -> String{
+        let config_lock = CONFIG.lock().unwrap();
+        // private_key = SecretKey::from_str(&config_lock.private_key)?;
+        config_lock.private_key.clone()
     }
 }
